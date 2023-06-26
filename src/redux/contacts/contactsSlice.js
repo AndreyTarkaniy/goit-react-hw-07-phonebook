@@ -1,36 +1,76 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit';
-import persistReducer from 'redux-persist/es/persistReducer';
-import storage from 'redux-persist/lib/storage';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { getContacts } from './contactsApi';
+import axios from 'axios';
+axios.defaults.baseURL = 'https://64957088b08e17c917921d03.mockapi.io';
 
-import ContactsData from 'components/data/contacts.json';
+// import ContactsData from 'components/data/contacts.json';
+
+// export const getContactsThunk = () => {
+//   return async dispatch => {
+//     dispatch(contactsSlice.actions.fetching());
+//     try {
+//       const data = await getContacts();
+//       dispatch(contactsSlice.actions.fetchSuccsess(data));
+//     } catch (error) {
+//       dispatch(contactsSlice.actions.fetchError(error));
+//     }
+//   };
+// };
+
+export const getContactsThunk = createAsyncThunk(
+  'contacts/getAllContacts',
+  getContacts
+);
+// async () => {
+//   const data = await axios.get('/contacts');
+//   console.log(data.data);
+//   return data.data;
+// }
+
+console.log(contactsSlice());
 
 const contactsSlice = createSlice({
   name: 'contatcs',
-  initialState: { contacts: ContactsData, filter: '' },
+  // initialState: { contacts: ContactsData, filter: '' },
+  initialState: { contacts: [], isLoading: false, error: '', filter: '' },
   reducers: {
-    addContact: {
-      reducer: (state, { payload }) => {
-        state.contacts.push(payload);
-      },
-      prepare: newConact => ({
-        payload: { ...newConact, id: nanoid() },
-      }),
+    fetching: state => {
+      state.isLoading = true;
     },
-    deleteContact: (state, { payload }) => {
-      state.contacts = state.contacts.filter(contact => contact.id !== payload);
+    fetchSuccsess: (state, { payload }) => {
+      state.isLoading = false;
+      state.contacts = payload;
+      state.error = '';
     },
-    changeFilter: (state, { payload }) => {
-      state.filter = payload;
+    fetchError: (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
     },
+    // addContact: {
+    //   reducer: (state, { payload }) => {
+    //     state.contacts.push(payload);
+    //   },
+    //   prepare: newConact => ({
+    //     payload: { ...newConact, id: nanoid() },
+    //   }),
+    // },
+    // deleteContact: (state, { payload }) => {
+    //   state.contacts = state.contacts.filter(contact => contact.id !== payload);
+    // },
+    // changeFilter: (state, { payload }) => {
+    //   state.filter = payload;
+    // },
   },
 });
 
-const persistContactsSlice = persistReducer(
-  { key: 'contacts', storage, whitelist: ['contacts'] },
-  contactsSlice.reducer
-);
+export const contactsReducer = contactsSlice.reducer;
 
-export const { addContact, deleteContact, changeFilter } =
-  contactsSlice.actions;
+// const persistContactsSlice = persistReducer(
+//   { key: 'contacts', storage, whitelist: ['contacts'] },
+//   contactsSlice.reducer
+// );
 
-export default persistContactsSlice;
+// export const { addContact, deleteContact, changeFilter } =
+//   contactsSlice.actions;
+
+// export default persistContactsSlice;
