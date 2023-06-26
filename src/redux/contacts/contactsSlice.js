@@ -27,7 +27,7 @@ export const getContactsThunk = createAsyncThunk(
 //   return data.data;
 // }
 
-console.log(contactsSlice());
+// console.log(contactsSlice());
 
 const contactsSlice = createSlice({
   name: 'contatcs',
