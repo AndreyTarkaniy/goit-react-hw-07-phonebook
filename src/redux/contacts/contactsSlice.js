@@ -1,9 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getContacts } from './contactsApi';
+import { addContacts, deleteContacts, getContacts } from './contactsApi';
 import axios from 'axios';
 axios.defaults.baseURL = 'https://64957088b08e17c917921d03.mockapi.io';
-
-// import ContactsData from 'components/data/contacts.json';
 
 // export const getContactsThunk = () => {
 //   return async dispatch => {
@@ -26,44 +24,93 @@ export const getContactsThunk = createAsyncThunk(
 //   console.log(data.data);
 //   return data.data;
 // }
+export const addContactsThunk = createAsyncThunk(
+  'contacts/getAllContacts',
+  addContacts
+);
+export const deleteContactsThunk = createAsyncThunk(
+  'contacts/getAllContacts',
+  deleteContacts
+);
 
-// console.log(contactsSlice());
+const handlPending = state => {
+  state.isLoading = true;
+};
+
+const handlReject = (state, { payload }) => {
+  state.isLoading = false;
+  state.error = payload;
+};
+
+const handlFulfilldGet = (state, { payload }) => {
+  state.isLoading = false;
+  state.contacts = payload;
+  state.error = '';
+};
+
+const handlFulfilldAdd = (state, { payload }) => {
+  state.isLoading = false;
+  state.contacts.push(payload);
+  state.error = '';
+};
+
+const handlFulfilldDelete = (state, { payload }) => {
+  state.isLoading = false;
+  state.contacts = state.contacts.filter(contact => contact.id !== payload);
+  state.error = '';
+};
 
 const contactsSlice = createSlice({
   name: 'contatcs',
-  // initialState: { contacts: ContactsData, filter: '' },
   initialState: { contacts: [], isLoading: false, error: '', filter: '' },
-  reducers: {
-    fetching: state => {
-      state.isLoading = true;
-    },
-    fetchSuccsess: (state, { payload }) => {
-      state.isLoading = false;
-      state.contacts = payload;
-      state.error = '';
-    },
-    fetchError: (state, { payload }) => {
-      state.isLoading = false;
-      state.error = payload;
-    },
-    // addContact: {
-    //   reducer: (state, { payload }) => {
-    //     state.contacts.push(payload);
-    //   },
-    //   prepare: newConact => ({
-    //     payload: { ...newConact, id: nanoid() },
-    //   }),
-    // },
-    // deleteContact: (state, { payload }) => {
-    //   state.contacts = state.contacts.filter(contact => contact.id !== payload);
-    // },
-    // changeFilter: (state, { payload }) => {
-    //   state.filter = payload;
-    // },
+  extraReducers: builder => {
+    builder
+      .addCase(getContactsThunk.pending, handlPending)
+      .addCase(getContactsThunk.fulfilled, handlFulfilldGet)
+      .addCase(getContactsThunk.rejected, handlReject)
+      .addCase(addContactsThunk.pending, handlPending)
+      .addCase(addContactsThunk.fulfilled, handlFulfilldAdd)
+      .addCase(addContactsThunk.rejected, handlReject)
+      .addCase(deleteContactsThunk.pending, handlPending)
+      .addCase(deleteContactsThunk.fulfilled, handlFulfilldDelete)
+      .addCase(deleteContactsThunk.rejected, handlReject);
   },
 });
-
+// reducers: {
+// changeFilter: (state, { payload }) => {
+//   state.filter = payload;
+// }
+// },
 export const contactsReducer = contactsSlice.reducer;
+// reducers: {
+//   fetching: state => {
+//     state.isLoading = true;
+//   },
+//   fetchSuccsess: (state, { payload }) => {
+//     state.isLoading = false;
+//     state.contacts = payload;
+//     state.error = '';
+//   },
+//   fetchError: (state, { payload }) => {
+//     state.isLoading = false;
+//     state.error = payload;
+//   },
+// addContact: {
+//   reducer: (state, { payload }) => {
+//     state.contacts.push(payload);
+//   },
+
+//   prepare: newConact => ({
+//     payload: { ...newConact, id: nanoid() },
+//   }),
+// },
+// deleteContact: (state, { payload }) => {
+//   state.contacts = state.contacts.filter(contact => contact.id !== payload);
+// },
+// changeFilter: (state, { payload }) => {
+//   state.filter = payload;
+// },
+// });
 
 // const persistContactsSlice = persistReducer(
 //   { key: 'contacts', storage, whitelist: ['contacts'] },

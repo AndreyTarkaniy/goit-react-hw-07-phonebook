@@ -10,4 +10,14 @@ export const getContacts = async () => {
   return data.data;
 };
 
-console.log(getContacts());
+export const addContacts = async newContact => {
+  const data = await axios.post('/contacts', newContact);
+
+  return data.data;
+};
+
+export const deleteContacts = async id => {
+  const data = await axios.delete('/contacts/:id', id);
+
+  return data.data;
+};
