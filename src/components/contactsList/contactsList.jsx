@@ -9,14 +9,6 @@ const ContactsList = () => {
   const { deleteContact } = useContacts();
   const contactsList = useSelector(selectFilterName);
 
-  // const filterContact = () => {
-  //   return contacts.filter(contact =>
-  //     contact.name.toLowerCase().includes(filter.toLowerCase())
-  //   );
-  // };
-
-  // const contactsList = filterContact();
-
   return (
     <ul className={css.list}>
       {contactsList.map(({ id, name, number }) => (

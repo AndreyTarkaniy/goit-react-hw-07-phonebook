@@ -46,19 +46,9 @@ const contactsSlice = createSlice({
       .addCase(deleteContactsThunk.pending, handlPending)
       .addCase(deleteContactsThunk.fulfilled, handlFulfilldDelete)
       .addCase(deleteContactsThunk.rejected, handlReject);
-    //     .addMatcher(action => {
-    //       action.type.endsWith('/pending', handlPending);
-    //     })
-    //     .addMatcher(action => {
-    //       action.type.endsWith('/reject', handlReject);
-    //     });
   },
 });
-// reducers: {
-// changeFilter: (state, { payload }) => {
-//   state.filter = payload;
-// }
-// },
+
 export const contactsReducer = contactsSlice.reducer;
 // reducers: {
 //   fetching: state => {

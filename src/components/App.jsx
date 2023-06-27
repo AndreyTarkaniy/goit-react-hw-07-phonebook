@@ -5,8 +5,10 @@ import Filter from 'components/filter/filter';
 import { useDispatch } from 'react-redux';
 import { getContactsThunk } from 'redux/contacts/thunk';
 import { useEffect } from 'react';
+import { useContacts } from 'redux/contacts/useContacts';
 
 export const App = () => {
+  const { isLoading, error } = useContacts();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -20,6 +22,7 @@ export const App = () => {
 
       <h2>Contacts</h2>
       <Filter />
+      {isLoading && !error && <b>Request in progress...</b>}
       <ContactsList />
     </Container>
   );
