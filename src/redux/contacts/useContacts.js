@@ -7,7 +7,7 @@ import {
   selectIsLoading,
 } from './selectors';
 import { deleteContactsThunk, addContactsThunk } from 'redux/contacts/thunk';
-// import * as actions from 'redux/contacts/contactsSlice';
+import * as actions from 'redux/contacts/filterSlice';
 
 export const useContacts = () => {
   const dispatch = useDispatch();
@@ -19,13 +19,12 @@ export const useContacts = () => {
   const addContact = newContact => {
     dispatch(addContactsThunk(newContact));
   };
-
   const deleteContact = id => {
     dispatch(deleteContactsThunk(id));
   };
-  // const changeFilter = value => {
-  //   dispatch(actions.changeFilterName(value));
-  // };
+  const changeFilter = value => {
+    dispatch(actions.changeFilterName(value));
+  };
 
   return {
     contacts,
@@ -34,7 +33,6 @@ export const useContacts = () => {
     error,
     addContact,
     deleteContact,
-    // changeFilter,
+    changeFilter,
   };
-  // return { contacts, filter, addContact, deleteContact, changeFilter };
 };

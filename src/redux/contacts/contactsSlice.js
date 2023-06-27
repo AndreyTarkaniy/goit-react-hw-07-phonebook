@@ -7,18 +7,6 @@ import {
 } from './thunk';
 axios.defaults.baseURL = 'https://64957088b08e17c917921d03.mockapi.io';
 
-// export const getContactsThunk = () => {
-//   return async dispatch => {
-//     dispatch(contactsSlice.actions.fetching());
-//     try {
-//       const data = await getContacts();
-//       dispatch(contactsSlice.actions.fetchSuccsess(data));
-//     } catch (error) {
-//       dispatch(contactsSlice.actions.fetchError(error));
-//     }
-//   };
-// };
-
 const handlPending = state => {
   state.isLoading = true;
   state.error = '';
