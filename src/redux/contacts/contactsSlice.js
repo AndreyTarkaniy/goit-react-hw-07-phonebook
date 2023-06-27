@@ -1,6 +1,10 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { addContacts, deleteContacts, getContacts } from './contactsApi';
+import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import {
+  addContactsThunk,
+  deleteContactsThunk,
+  getContactsThunk,
+} from './thunk';
 axios.defaults.baseURL = 'https://64957088b08e17c917921d03.mockapi.io';
 
 // export const getContactsThunk = () => {
@@ -14,20 +18,6 @@ axios.defaults.baseURL = 'https://64957088b08e17c917921d03.mockapi.io';
 //     }
 //   };
 // };
-
-export const getContactsThunk = createAsyncThunk(
-  'contacts/getAllContacts',
-  getContacts
-);
-
-export const addContactsThunk = createAsyncThunk(
-  'contacts/addContacts',
-  addContacts
-);
-export const deleteContactsThunk = createAsyncThunk(
-  'contacts/deleteContacts',
-  deleteContacts
-);
 
 const handlPending = state => {
   state.isLoading = true;
@@ -59,21 +49,21 @@ const contactsSlice = createSlice({
   initialState: { contacts: [], isLoading: false, error: '', filter: '' },
   extraReducers: builder => {
     builder
-      // .addCase(getContactsThunk.pending, handlPending)
+      .addCase(getContactsThunk.pending, handlPending)
       .addCase(getContactsThunk.fulfilled, handlFulfilldGet)
-      // .addCase(getContactsThunk.rejected, handlReject)
-      // .addCase(addContactsThunk.pending, handlPending)
+      .addCase(getContactsThunk.rejected, handlReject)
+      .addCase(addContactsThunk.pending, handlPending)
       .addCase(addContactsThunk.fulfilled, handlFulfilldAdd)
-      // .addCase(addContactsThunk.rejected, handlReject)
-      // .addCase(deleteContactsThunk.pending, handlPending)
+      .addCase(addContactsThunk.rejected, handlReject)
+      .addCase(deleteContactsThunk.pending, handlPending)
       .addCase(deleteContactsThunk.fulfilled, handlFulfilldDelete)
-      // .addCase(deleteContactsThunk.rejected, handlReject)
-      .addMatcher(action => {
-        action.type.endsWith('/pending', handlPending);
-      })
-      .addMatcher(action => {
-        action.type.endsWith('/reject', handlReject);
-      });
+      .addCase(deleteContactsThunk.rejected, handlReject);
+    //     .addMatcher(action => {
+    //       action.type.endsWith('/pending', handlPending);
+    //     })
+    //     .addMatcher(action => {
+    //       action.type.endsWith('/reject', handlReject);
+    //     });
   },
 });
 // reducers: {

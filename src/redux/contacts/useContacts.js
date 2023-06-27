@@ -6,10 +6,7 @@ import {
   selectFilter,
   selectIsLoading,
 } from './selectors';
-import {
-  deleteContactsThunk,
-  addContactsThunk,
-} from 'redux/contacts/contactsSlice';
+import { deleteContactsThunk, addContactsThunk } from 'redux/contacts/thunk';
 // import * as actions from 'redux/contacts/contactsSlice';
 
 export const useContacts = () => {
@@ -26,10 +23,18 @@ export const useContacts = () => {
   const deleteContact = id => {
     dispatch(deleteContactsThunk(id));
   };
-  //   const changeFilter = value => {
-  //     dispatch(actions.changeFilter(value));
-  //   };
+  // const changeFilter = value => {
+  //   dispatch(actions.changeFilterName(value));
+  // };
 
-  return { contacts, filter, isLoading, error, addContact, deleteContact };
+  return {
+    contacts,
+    filter,
+    isLoading,
+    error,
+    addContact,
+    deleteContact,
+    // changeFilter,
+  };
   // return { contacts, filter, addContact, deleteContact, changeFilter };
 };
