@@ -19,22 +19,19 @@ export const getContactsThunk = createAsyncThunk(
   'contacts/getAllContacts',
   getContacts
 );
-// async () => {
-//   const data = await axios.get('/contacts');
-//   console.log(data.data);
-//   return data.data;
-// }
+
 export const addContactsThunk = createAsyncThunk(
-  'contacts/getAllContacts',
+  'contacts/addContacts',
   addContacts
 );
 export const deleteContactsThunk = createAsyncThunk(
-  'contacts/getAllContacts',
+  'contacts/deleteContacts',
   deleteContacts
 );
 
 const handlPending = state => {
   state.isLoading = true;
+  state.error = '';
 };
 
 const handlReject = (state, { payload }) => {
@@ -45,19 +42,16 @@ const handlReject = (state, { payload }) => {
 const handlFulfilldGet = (state, { payload }) => {
   state.isLoading = false;
   state.contacts = payload;
-  state.error = '';
 };
 
 const handlFulfilldAdd = (state, { payload }) => {
   state.isLoading = false;
   state.contacts.push(payload);
-  state.error = '';
 };
 
 const handlFulfilldDelete = (state, { payload }) => {
   state.isLoading = false;
   state.contacts = state.contacts.filter(contact => contact.id !== payload);
-  state.error = '';
 };
 
 const contactsSlice = createSlice({
@@ -65,15 +59,21 @@ const contactsSlice = createSlice({
   initialState: { contacts: [], isLoading: false, error: '', filter: '' },
   extraReducers: builder => {
     builder
-      .addCase(getContactsThunk.pending, handlPending)
+      // .addCase(getContactsThunk.pending, handlPending)
       .addCase(getContactsThunk.fulfilled, handlFulfilldGet)
-      .addCase(getContactsThunk.rejected, handlReject)
-      .addCase(addContactsThunk.pending, handlPending)
+      // .addCase(getContactsThunk.rejected, handlReject)
+      // .addCase(addContactsThunk.pending, handlPending)
       .addCase(addContactsThunk.fulfilled, handlFulfilldAdd)
-      .addCase(addContactsThunk.rejected, handlReject)
-      .addCase(deleteContactsThunk.pending, handlPending)
+      // .addCase(addContactsThunk.rejected, handlReject)
+      // .addCase(deleteContactsThunk.pending, handlPending)
       .addCase(deleteContactsThunk.fulfilled, handlFulfilldDelete)
-      .addCase(deleteContactsThunk.rejected, handlReject);
+      // .addCase(deleteContactsThunk.rejected, handlReject)
+      .addMatcher(action => {
+        action.type.endsWith('/pending', handlPending);
+      })
+      .addMatcher(action => {
+        action.type.endsWith('/reject', handlReject);
+      });
   },
 });
 // reducers: {
