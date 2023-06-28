@@ -4,9 +4,10 @@ import {
   selectContacts,
   selectError,
   selectFilter,
+  selectFilterName,
   selectIsLoading,
 } from './selectors';
-import { deleteContactsThunk, addContactsThunk } from 'redux/contacts/thunk';
+import { deleteContactsThunk, addContactsThunk } from 'redux/contacts/thunkApi';
 import * as actions from 'redux/contacts/filterSlice';
 
 export const useContacts = () => {
@@ -15,6 +16,7 @@ export const useContacts = () => {
   const filter = useSelector(selectFilter);
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
+  const contactsNameList = useSelector(selectFilterName);
 
   const addContact = newContact => {
     dispatch(addContactsThunk(newContact));
@@ -31,6 +33,7 @@ export const useContacts = () => {
     filter,
     isLoading,
     error,
+    contactsNameList,
     addContact,
     deleteContact,
     changeFilter,
